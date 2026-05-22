@@ -17,11 +17,15 @@ app.add_middleware(
 # =========================================================================
 # 【重要】ここにパスワードを書き換えたSupabaseの接続用URL（URI）を貼り付けてください
 # =========================================================================
-DATABASE_URL = "postgresql://postgres:hamaniku23-1@db.doryrnzteamqzrfmgtab.supabase.co:5432/postgres"
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
 def get_db_connection():
-    # クラウドデータベースへの接続パイプを開く関数
-    return psycopg2.connect(DATABASE_URL)
+    # URLから必要な情報を取得して接続
+    return psycopg2.connect(
+        DATABASE_URL,
+        connect_timeout=10,
+        sslmode='require'
+    )
 
 def init_db():
     conn = get_db_connection()
